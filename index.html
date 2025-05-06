@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>File Redaction Tool</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+        }
+        .btn {
+            transition: all 0.3s ease-in-out;
+            border-radius: 30px;
+            padding: 12px 20px;
+            font-size: 16px;
+        }
+        .btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+<body class="flex flex-col items-center justify-center min-h-screen text-white">
+    <div class="bg-white p-8 rounded-lg shadow-2xl w-96 text-center text-gray-800">
+        <h1 class="text-3xl font-bold mb-4">🔏 File Redaction Tool</h1>
+        <form action="/" method="post" enctype="multipart/form-data">
+            <input type="file" name="file" accept=".pdf,.docx" required class="border p-3 w-full rounded-md" />
+            <textarea name="redact_words" id="redactWords" placeholder="Enter words to redact..." class="border p-3 w-full mt-3 rounded-md"></textarea>
+            <button type="button" onclick="startListening()" class="btn bg-purple-600 text-white w-full mt-3">
+                🎤 Speak Words
+            </button>
+            <button type="submit" class="btn bg-blue-600 text-white w-full mt-3">
+                📝 Apply Redaction
+            </button>
+        </form>
+    </div>
+
+    <script>
+        function startListening() {
+            let recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+            recognition.lang = 'en-US';
+            recognition.start();
+            recognition.onresult = function(event) {
+                let transcript = event.results[0][0].transcript;
+                document.getElementById("redactWords").value += (document.getElementById("redactWords").value ? ", " : "") + transcript;
+            };
+        }
+    </script>
+</body>
+</html>
